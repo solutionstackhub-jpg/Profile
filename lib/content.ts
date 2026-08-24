@@ -241,7 +241,7 @@ export const stack = {
     },
     {
       name: "Móvil",
-      items: ["PWA", "[ React Native ]", "[ Flutter ]"],
+      items: ["PWA"],
     },
   ],
   /* Cinta superior — se repite automáticamente. */
@@ -306,8 +306,8 @@ export const cases: CaseStudy[] = [
     solution:
       "El encargado fotografía la factura por WhatsApp. La IA extrae los datos y avisa solo cuando un precio sube.",
     stack: ["n8n", "WhatsApp Cloud API", "GPT-4o", "Supabase"],
-    before: "[ Ej.: revisión manual de facturas ]",
-    after: "[ Ej.: alerta automática al subir un precio ]",
+    before: "Revisión de facturas una por una, al cierre",
+    after: "Aviso automático en cuanto sube un precio",
     result:
       "Detectar una subida deja de depender de que alguien revise.",
     image: "/img/caso-costes.jpg",
