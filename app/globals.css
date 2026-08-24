@@ -1,0 +1,224 @@
+@import "tailwindcss";
+
+@theme {
+  /* ---- Fondos oscuros ---- */
+  --color-void:    #05070B;
+  --color-ink:     #080B11;
+  --color-surface: #0D1219;
+  --color-raised:  #131A24;
+
+  /* ---- Texto ----
+     Tres niveles, los tres por encima de 4,5:1 sobre el fondo y sobre el
+     vidrio. Antes fg-3 estaba en 3,90:1 y no se leía.
+        fg    #EDF1F7  17,8:1
+        fg-2  #A6B1C2   9,3:1
+        fg-3  #8894A6   6,6:1  (5,9:1 sobre vidrio) */
+  --color-fg:      #EDF1F7;
+  --color-fg-2:    #A6B1C2;
+  --color-fg-3:    #8894A6;
+
+  /* ---- Acento luminoso ---- */
+  --color-accent:   #5B8CFF;
+  --color-accent-2: #B57BFF;
+  --color-accent-3: #3BE8D0;
+
+  --font-display: var(--font-instrument);
+  --font-body:    var(--font-instrument);
+  --font-mono:    var(--font-geist-mono);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+    background: var(--color-void);
+  }
+  body {
+    background: var(--color-void);
+    color: var(--color-fg);
+    font-family: var(--font-body), system-ui, sans-serif;
+    /* Sobre fondo oscuro el texto claro se percibe más apretado:
+       más interlineado y un pelo de tracking lo compensan. */
+    line-height: 1.65;
+    letter-spacing: 0.005em;
+  }
+  p { text-wrap: pretty; }
+  /* Al saltar a un ancla, dejar aire para la cabecera fija de 80 px. */
+  section[id] { scroll-margin-top: 6.5rem; }
+  ::selection { background: var(--color-accent); color: #04060A; }
+}
+
+@layer components {
+
+  .shell { width: 100%; max-width: 82rem; margin-inline: auto; padding-inline: 1.5rem; }
+  @media (min-width: 1024px) { .shell { padding-inline: 3.5rem; } }
+
+  /* ---------- Tipografía ---------- */
+  .h-display {
+    font-family: var(--font-display), system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.038em;
+    line-height: 0.94;
+    text-wrap: balance;
+  }
+  .h-sec {
+    font-family: var(--font-display), system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.028em;
+    line-height: 1.06;
+    text-wrap: balance;
+  }
+  /* ---------- Palabra destacada ----------
+     El degradado baja de intensidad y el color pasa al halo. `drop-shadow`
+     sigue la silueta real de las letras, así que el texto parece emitir luz
+     en la oscuridad en vez de estar pintado de violeta.
+     Los radios van en `em` para que el halo escale con el titular. */
+  .grad {
+    background: linear-gradient(96deg, #FFFFFF 0%, #EDF1FF 52%, #D5CDEE 100%);
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent;
+    filter:
+      drop-shadow(0 0 0.09em rgba(150, 175, 235, .26))
+      drop-shadow(0 0 0.24em rgba(150, 135, 220, .13));
+  }
+
+  /* ---------- Botón principal ----------
+     Mismo criterio: degradado apagado, halo encendido. */
+  .btn-grad {
+    background: linear-gradient(96deg, #E2EBFF 0%, #BCCCFF 52%, #C9C0F2 100%);
+    color: var(--color-void);
+    box-shadow:
+      0 0 16px rgba(140, 165, 235, .18),
+      0 14px 38px -20px rgba(140, 150, 220, .38);
+    transition: box-shadow .35s ease, transform .25s ease;
+  }
+  .btn-grad:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 0 24px rgba(150, 175, 240, .30),
+      0 16px 44px -18px rgba(145, 155, 225, .50);
+  }
+
+  /* Viñeta: un punto que brilla. Un degradado de 4 px no lo ve nadie. */
+  .dot-grad {
+    background: #9DB9FF;
+    box-shadow: 0 0 5px rgba(140, 165, 235, .5);
+  }
+  /* Etiqueta de sección. 12 px es el mínimo de toda la página; el tracking
+     ancho a tamaño pequeño destruye la forma de la palabra, así que baja
+     de .22em a .12em. */
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: .7rem;
+    font-family: var(--font-mono), monospace;
+    font-size: .8125rem; font-weight: 500; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--color-fg-3);
+  }
+  .eyebrow::before {
+    content: ""; width: 1.6rem; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-accent));
+    filter: drop-shadow(0 0 3px rgba(91, 140, 255, .4));
+  }
+
+  /* ---------- Fotografía cinematográfica ----------
+     Todas las fotos reciben el mismo grado de color hacia el azul de marca
+     y un velo de oscurecimiento para que el texto siempre se lea. */
+  .cine { position: relative; overflow: hidden; isolation: isolate; }
+  .cine > img { filter: saturate(.88) contrast(1.06) brightness(.96); }
+  .cine::before {
+    content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(135deg,
+      color-mix(in oklab, var(--color-accent) 22%, transparent) 0%,
+      transparent 52%,
+      color-mix(in oklab, var(--color-accent-2) 15%, transparent) 100%);
+    mix-blend-mode: overlay;
+  }
+  /* Velo suave: oscurece lo justo para que el texto se lea, sin apagar la foto. */
+  .cine::after {
+    content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    background:
+      linear-gradient(to top, var(--color-void) 0%, rgba(5,7,11,.62) 22%, rgba(5,7,11,.14) 55%, rgba(5,7,11,.38) 100%);
+  }
+  /* Variante para bloques con el texto a la izquierda: la foto queda limpia a la derecha. */
+  .cine-side::after {
+    background:
+      linear-gradient(to right, rgba(5,7,11,.95) 0%, rgba(5,7,11,.88) 30%, rgba(5,7,11,.5) 58%, rgba(5,7,11,.1) 100%),
+      linear-gradient(to bottom, rgba(5,7,11,.6) 0%, transparent 20%, transparent 74%, var(--color-void) 100%);
+  }
+  .cine-content { position: relative; z-index: 3; }
+  /* Para párrafos que caen sobre zonas claras de una foto. */
+  .on-photo { text-shadow: 0 1px 16px rgba(5,7,11,.85), 0 1px 3px rgba(5,7,11,.6); }
+
+  /* ---------- Vidrio ---------- */
+  .glass {
+    background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.016));
+    border: 1px solid rgba(255,255,255,.085);
+    backdrop-filter: blur(20px) saturate(1.25);
+    -webkit-backdrop-filter: blur(20px) saturate(1.25);
+  }
+  /* Variante opaca: para paneles que se apoyan sobre una fotografía,
+     donde el vidrio transparente dejaría el texto ilegible. */
+  .glass-solid {
+    background: linear-gradient(180deg, rgba(9,13,19,.9), rgba(9,13,19,.76));
+    border: 1px solid rgba(255,255,255,.1);
+    backdrop-filter: blur(26px) saturate(1.2);
+    -webkit-backdrop-filter: blur(26px) saturate(1.2);
+  }
+
+  /* Filo de luz superior */
+  .edge { position: relative; }
+  .edge::before {
+    content: ""; position: absolute; left: 12%; right: 12%; top: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.42), transparent);
+  }
+
+  /* ---------- Luces de fondo ---------- */
+  .glow {
+    position: absolute; border-radius: 9999px;
+    filter: blur(100px); pointer-events: none;
+  }
+
+  /* ---------- Retícula ---------- */
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.045) 1px, transparent 1px);
+    background-size: 6rem 6rem;
+    mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, #000 30%, transparent 100%);
+  }
+
+  /* ---------- Grano de película ---------- */
+  .grain::after {
+    content: ""; position: fixed; inset: 0; z-index: 60; pointer-events: none;
+    opacity: .04; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- Marco de caso reservado ---------- */
+  .slot-frame {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      rgba(255,255,255,.05) 0 1px,
+      transparent 1px 12px
+    );
+  }
+
+  /* ---------- Revelado ----------
+     Visible por defecto: la animación se activa solo con <html class="js">,
+     que el script de arranque retira si React no llega a hidratar. */
+  .reveal { opacity: 1; }
+  .js .reveal { opacity: 0; transform: translateY(22px); }
+  .js .reveal.is-in {
+    opacity: 1; transform: none;
+    transition: opacity .85s cubic-bezier(.22,.8,.3,1), transform .85s cubic-bezier(.22,.8,.3,1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .js .reveal { opacity: 1; transform: none; }
+    .js .reveal.is-in { transition: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  /* ---------- Cinta ---------- */
+  .marquee-track { display: flex; width: max-content; animation: marquee 46s linear infinite; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
+}
