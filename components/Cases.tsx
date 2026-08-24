@@ -86,15 +86,18 @@ function FilledCard({ item }: { item: CaseStudy }) {
           </p>
         )}
 
-        {item.stack.length > 0 && (
-          <p className="mt-4 pb-4 text-[0.8125rem] leading-relaxed text-fg-3">
-            {item.stack.join("  ·  ")}
+        {/* El resultado de negocio va antes que el stack: el cliente decide
+            por lo que gana, no por las herramientas. La tecnología cierra la
+            ficha como respaldo, anclada al pie para que las tarjetas cuadren. */}
+        {item.result && (
+          <p className="mt-5 border-t border-white/8 pt-5 text-[0.9375rem] text-accent">
+            {item.result}
           </p>
         )}
 
-        {item.result && (
-          <p className="mt-auto border-t border-white/8 pt-4 text-[0.9375rem] text-accent">
-            {item.result}
+        {item.stack.length > 0 && (
+          <p className="mt-auto pt-5 text-[0.8125rem] leading-relaxed text-fg-3">
+            {item.stack.join("  ·  ")}
           </p>
         )}
       </div>

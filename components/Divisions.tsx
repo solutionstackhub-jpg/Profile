@@ -20,8 +20,8 @@ export default function Divisions() {
           </Reveal>
           <Reveal delay={110} className="lg:col-span-5 lg:col-start-8 lg:self-end">
             <p className="text-[1.125rem] leading-relaxed text-fg-2">
-              La mayoría de las empresas no sabe si necesita una web, un sistema interno o
-              automatizar un proceso. Y no tiene por qué saberlo. Ese diagnóstico es nuestro
+              Muchas empresas llegan sin saber si necesita una web, un sistema interno o
+              automatizar un proceso. Y no tienen por qué saberlo. Ese diagnóstico es nuestro
               trabajo: usted describe el problema, nosotros determinamos cuál de estas cuatro
               áreas —o cuáles— lo resuelven.
             </p>

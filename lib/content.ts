@@ -16,6 +16,12 @@ export const brand = {
    */
   name: "ARQELYS",
   status: "Identidad en evaluación",
+  /**
+   * Elementos internos: la página /marca y el sello «Identidad en evaluación».
+   * Ponerlo en `false` el día que el nombre quede confirmado y la web pase a
+   * ser la versión comercial definitiva. Es el único cambio necesario.
+   */
+  showInternal: true,
   tagline: "Tecnología y transformación digital",
   claim: "Entendemos el problema. Diseñamos la solución. Construimos la tecnología.",
 };
@@ -186,7 +192,7 @@ export const assurances = [
   {
     title: "No cotizamos sin entender",
     body:
-      "El diagnóstico va antes que el precio. Cotizar a ciegas es la causa número uno de proyectos que se desbordan en tiempo y costo.",
+      "El diagnóstico va antes que el precio. Cotizar sin entender el problema aumenta el riesgo de desviaciones de alcance, tiempo y costo.",
   },
   {
     title: "Alcance cerrado por escrito",
@@ -422,7 +428,7 @@ export const contact = {
   title: "Cuéntenos el problema.",
   titleAccent: "Nosotros estudiamos si vale la pena resolverlo.",
   body:
-    "El diagnóstico inicial no tiene costo ni compromiso. Si al terminarlo concluimos que la tecnología no es la respuesta a su problema, se lo vamos a decir.",
+    "Cuéntenos qué proceso quiere mejorar y le decimos si vale la pena resolverlo con tecnología. Si concluimos que no lo vale, se lo diremos igual.",
   /** `href` opcional: si existe, el dato se vuelve un enlace. */
   fields: [
     {
@@ -448,6 +454,8 @@ export const contact = {
   ],
   cta: {
     label: "Solicitar diagnóstico",
+    /** Se muestra bajo el botón: quita la fricción de «¿y ahora qué pasa?». */
+    hint: "Sin costo ni compromiso · Respondemos en 48 horas",
     href:
       "mailto:juliocarpio1981@gmail.com?subject=" +
       encodeURIComponent("Solicitud de diagnóstico"),

@@ -1,5 +1,5 @@
 import Reveal from "./Reveal";
-import { method } from "@/lib/content";
+import { brand, method } from "@/lib/content";
 
 export default function Method() {
   return (
@@ -11,17 +11,16 @@ export default function Method() {
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-32">
             <Reveal>
-              <span className="eyebrow">Método</span>
+              <span className="eyebrow">Método {brand.name}</span>
               <h2 className="h-sec mt-7 text-[clamp(2.2rem,4.6vw,3.8rem)]">
                 Cinco etapas.
                 <br />
                 <span className="grad">Ninguna se salta.</span>
               </h2>
               <p className="mt-8 max-w-sm text-[1rem] leading-relaxed text-fg-2">
-                Los proyectos de software no fracasan por falta de talento. Fracasan porque se
-                empieza a construir antes de entender, y porque el cliente descubre el resultado
-                cuando ya es tarde para corregirlo. Este método existe para eliminar esas dos
-                causas.
+                Cuando un proyecto de software se desborda, suele haber dos motivos detrás: se
+                  empezó a construir antes de entender, y el cliente vio el resultado cuando ya
+                  era tarde para corregirlo. Este método existe para evitar los dos.
               </p>
             </Reveal>
           </div>

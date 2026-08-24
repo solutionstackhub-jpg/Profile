@@ -31,6 +31,7 @@ export default function Contact() {
                   className="transition-transform group-hover:translate-x-0.5" />
               </svg>
             </a>
+            <p className="mt-4 text-[0.875rem] text-fg-3">{contact.cta.hint}</p>
           </Reveal>
         </div>
 

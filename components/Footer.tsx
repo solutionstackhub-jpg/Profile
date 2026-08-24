@@ -16,15 +16,19 @@ export default function Footer() {
               <a key={item.href} href={item.href}
                 className="text-[0.875rem] text-fg-2 transition-colors hover:text-fg">{item.label}</a>
             ))}
-            <a href="/marca" className="text-[0.875rem] text-accent transition-opacity hover:opacity-75">
-              Propuestas de marca
-            </a>
+            {/* Enlace interno: se oculta en la versión comercial. */}
+            {brand.showInternal && (
+              <a href="/marca" className="text-[0.875rem] text-accent transition-opacity hover:opacity-75">
+                Propuestas de marca
+              </a>
+            )}
           </nav>
         </div>
 
         <div className="mt-10 flex flex-col gap-3 border-t border-white/8 pt-8 font-mono text-[0.8125rem] uppercase tracking-[0.12em] text-fg-3 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            Presentación corporativa · {brand.name} — {brand.status}
+            Presentación corporativa · {brand.name}
+            {brand.showInternal ? ` — ${brand.status}` : ""}
           </p>
           <p>Fotografías: Unsplash License</p>
         </div>

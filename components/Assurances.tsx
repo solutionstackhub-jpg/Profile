@@ -20,10 +20,10 @@ export default function Assurances() {
           </Reveal>
           <Reveal delay={110} className="lg:col-span-5 lg:col-start-8 lg:self-end">
             <p className="text-[1.125rem] leading-relaxed text-fg-2">
-              El riesgo real de contratar desarrollo no es el precio. Es pagar por algo que nunca
-              se termina, que el equipo no usa, o que lo deja atado de por vida a un proveedor.
-              Estas seis reglas existen para eliminar ese riesgo, y quedan por escrito antes de
-              empezar.
+              Al contratar desarrollo, el precio no suele ser lo que más pesa. Pesa más pagar
+                por algo que nunca se termina, que el equipo no usa, o que deja a la empresa
+                atada a un proveedor. Estas seis reglas reducen ese riesgo y quedan por escrito
+                antes de empezar.
             </p>
           </Reveal>
         </div>
