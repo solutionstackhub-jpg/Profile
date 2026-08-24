@@ -447,9 +447,15 @@ export const contact = {
     },
     {
       label: "Ubicación",
-      /* La sociedad se constituye y opera desde Venezuela.
-         Falta la ciudad: añadirla aquí en cuanto esté confirmada. */
-      value: "Venezuela",
+      /* Dos países a propósito. La sociedad se constituye en Venezuela, pero
+         el socio comercial atiende desde Argentina hasta diciembre y el
+         WhatsApp es un +54: sin mostrar Argentina, el número parecía un error.
+         Mostrar los dos también habilita publicidad pagada en ambos mercados.
+         Añadir la ciudad de Venezuela en cuanto esté confirmada. */
+      paises: [
+        { code: "VE", nombre: "Venezuela" },
+        { code: "AR", nombre: "Argentina" },
+      ],
       note: "Proyectos en toda Latinoamérica",
     },
   ],

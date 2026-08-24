@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Reveal from "./Reveal";
+import { Flag } from "./Flag";
 import { contact } from "@/lib/content";
 
 export default function Contact() {
@@ -42,7 +43,16 @@ export default function Contact() {
                 <div key={f.label} className={i === 0 ? "pb-5" : "py-5 last:pb-0"}>
                   <dt className="font-mono text-[0.8125rem] uppercase tracking-[0.12em] text-fg-2">{f.label}</dt>
                   <dd className="mt-2.5 text-[1.125rem] text-fg">
-                    {"href" in f && f.href ? (
+                    {"paises" in f && f.paises ? (
+                      <span className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                        {f.paises.map((p) => (
+                          <span key={p.code} className="flex items-center gap-2">
+                            <Flag code={p.code} className="h-[0.9em] w-auto shrink-0" />
+                            {p.nombre}
+                          </span>
+                        ))}
+                      </span>
+                    ) : "href" in f && f.href ? (
                       <a
                         href={f.href}
                         className="underline decoration-white/20 underline-offset-4 transition-colors hover:decoration-accent"
