@@ -42,6 +42,25 @@ export default function Stack() {
           </div>
         </div>
       </div>
+
+      {/* Cinta de tecnologías. Vive aquí, con el resto de la capacidad
+          técnica, y no en la portada: el cliente debe entender primero qué
+          problema le resolvemos y qué gana, no con qué lo construimos. */}
+      <div className="mt-16 overflow-hidden border-y border-white/6 py-4 lg:mt-24">
+        <div className="marquee-track">
+          {[0, 1].map((dup) => (
+            <ul key={dup} className="flex shrink-0 items-center" aria-hidden={dup === 1}>
+              {stack.marquee.map((t) => (
+                <li key={`${dup}-${t}`}
+                  className="flex items-center gap-8 whitespace-nowrap px-4 font-mono text-[0.8125rem] uppercase tracking-[0.12em] text-fg-3">
+                  {t}
+                  <span className="h-1 w-1 rounded-full bg-accent/50" />
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }

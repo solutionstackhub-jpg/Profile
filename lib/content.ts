@@ -16,12 +16,14 @@ export const brand = {
    */
   name: "ARQELYS",
   status: "Identidad en evaluación",
-  /**
-   * Elementos internos: la página /marca y el sello «Identidad en evaluación».
-   * Ponerlo en `false` el día que el nombre quede confirmado y la web pase a
-   * ser la versión comercial definitiva. Es el único cambio necesario.
-   */
-  showInternal: true,
+  /* Versión comercial: en `false` no se muestran ni la página /marca ni el
+     sello «Identidad en evaluación». La página sigue accesible por su URL
+     directa para uso interno. Volver a `true` solo si se retoma el debate
+     del nombre en público. */
+  showInternal: false,
+  /** Frase de posicionamiento. Es uno de los pilares de la empresa, así que
+      aparece dos veces: al abrir la portada y en la banda de manifiesto. */
+  pillar: "No vendemos páginas web.",
   tagline: "Tecnología y transformación digital",
   claim: "Entendemos el problema. Diseñamos la solución. Construimos la tecnología.",
 };
@@ -37,7 +39,6 @@ export const nav = [
 
 export const hero = {
   eyebrow: "Consultoría · Arquitectura · Desarrollo",
-  kicker: "No vendemos páginas web.",
   titleTop: "Resolvemos",
   titleMid: "problemas de negocio",
   titleAccent: "con tecnología.",

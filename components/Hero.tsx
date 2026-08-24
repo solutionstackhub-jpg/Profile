@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Reveal from "./Reveal";
-import { hero, commitments, stack } from "@/lib/content";
+import { brand, hero, commitments } from "@/lib/content";
 
 export default function Hero() {
   return (
@@ -31,7 +31,10 @@ export default function Hero() {
           </Reveal>
 
           <Reveal delay={90}>
-            <p className="on-photo mt-8 text-[1rem] font-medium tracking-wide text-fg-2">{hero.kicker}</p>
+            <p className="on-photo mt-8 flex items-center gap-3.5 text-[1.2rem] font-medium text-fg">
+              <span aria-hidden className="h-5 w-px shrink-0 bg-accent" />
+              {brand.pillar}
+            </p>
           </Reveal>
 
           <Reveal delay={150}>
@@ -94,22 +97,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* ---- Cinta de tecnologías ---- */}
-      <div className="relative z-10 mt-10 overflow-hidden border-y border-white/6 py-4">
-        <div className="marquee-track">
-          {[0, 1].map((dup) => (
-            <ul key={dup} className="flex shrink-0 items-center" aria-hidden={dup === 1}>
-              {stack.marquee.map((t) => (
-                <li key={`${dup}-${t}`}
-                  className="flex items-center gap-8 whitespace-nowrap px-4 font-mono text-[0.8125rem] uppercase tracking-[0.12em] text-fg-3">
-                  {t}
-                  <span className="h-1 w-1 rounded-full bg-accent/50" />
-                </li>
-              ))}
-            </ul>
-          ))}
-        </div>
-      </div>
     </section>
   );
 }

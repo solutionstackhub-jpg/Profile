@@ -64,13 +64,13 @@ function FilledCard({ item }: { item: CaseStudy }) {
             renglones por campo y estiraba la tarjeta sin aportar nada. */}
         <div className="mt-4 space-y-2.5 text-[0.9375rem] leading-relaxed text-fg-2">
           <p>
-            <span className="mr-2 font-mono text-[0.72rem] uppercase tracking-[0.1em] text-fg-3">
+            <span className="mr-2 font-mono text-[0.75rem] uppercase tracking-[0.1em] text-fg-3">
               Problema
             </span>
             {item.problem}
           </p>
           <p>
-            <span className="mr-2 font-mono text-[0.72rem] uppercase tracking-[0.1em] text-fg-3">
+            <span className="mr-2 font-mono text-[0.75rem] uppercase tracking-[0.1em] text-fg-3">
               Solución
             </span>
             {item.solution}

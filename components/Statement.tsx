@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Reveal from "./Reveal";
+import { brand } from "@/lib/content";
 
 export default function Statement() {
   return (
@@ -10,6 +11,9 @@ export default function Statement() {
 
       <div className="relative z-10 shell py-20 lg:py-28">
         <Reveal>
+          <p className="on-photo mb-7 text-[1.05rem] font-medium text-fg-2">{brand.pillar}</p>
+        </Reveal>
+        <Reveal delay={70}>
           <p className="h-display max-w-5xl text-[clamp(2.1rem,5.4vw,4.6rem)]">
             Entendemos el problema.
             <br />

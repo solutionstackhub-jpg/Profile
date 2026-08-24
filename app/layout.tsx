@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Instrument_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import CursorGlow from "@/components/CursorGlow";
 
 /* Instrument Sans: grotesca contemporánea de x-alta grande y formas abiertas.
    Sobre fondo oscuro rinde mejor que una neo-grotesca neutra, porque la
@@ -43,7 +44,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           }}
         />
       </head>
-      <body className="grain min-h-full flex flex-col bg-void text-fg">{children}</body>
+      <body className="grain min-h-full flex flex-col bg-void text-fg">
+        {children}
+        {/* Estela de luz del cursor. Va después del contenido y en z-40:
+            por debajo de la cabecera fija (z-50) para no lavarle el texto. */}
+        <CursorGlow />
+      </body>
     </html>
   );
 }
