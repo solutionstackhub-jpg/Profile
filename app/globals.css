@@ -217,6 +217,19 @@
     html { scroll-behavior: auto; }
   }
 
+  /* ---------- Estela del cursor ----------
+     El modo `screen` es lo que hace que sume luz en vez de tapar. Si el
+     navegador no lo soporta, el halo se vería como un velo azul encima del
+     texto: en ese caso es mejor no mostrar nada. */
+  .cursor-glow { mix-blend-mode: screen; }
+  @supports not (mix-blend-mode: screen) {
+    .cursor-glow { display: none; }
+  }
+  /* Coherente con el resto del sitio: sin animación si el sistema lo pide. */
+  @media (prefers-reduced-motion: reduce) {
+    .cursor-glow { display: none; }
+  }
+
   /* ---------- Cinta ---------- */
   .marquee-track { display: flex; width: max-content; animation: marquee 46s linear infinite; }
   @keyframes marquee { to { transform: translateX(-50%); } }

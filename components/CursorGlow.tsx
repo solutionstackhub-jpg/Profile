@@ -8,11 +8,11 @@ import { useEffect, useRef } from "react";
  * En vez de dibujar partículas —que ensucian y cuestan— se apilan cinco halos
  * radiales que persiguen al puntero a velocidades distintas. Al mover el ratón
  * se abren a lo largo del recorrido; al parar, se cierran sobre un único punto.
- * Se mezclan en modo `screen`, así que suman luz sobre el fondo oscuro en lugar
+ * Se mezclan en modo `screen`, así que suman luz sobre el fondo oscuro en vez
  * de pintar encima: por eso se lee como algo limpio y no como una mancha.
  *
- * El bucle escribe directamente sobre `style.transform`; no pasa por el estado
- * de React, de modo que no provoca renders y se mantiene a 60 fps.
+ * El bucle escribe directamente sobre `style.transform`, sin pasar por el
+ * estado de React: cero renders y el trabajo se queda en la GPU.
  */
 
 /** De fuera hacia dentro: cuanto más grande, más lento y más difuso. */
@@ -24,64 +24,135 @@ const CAPAS = [
   { tam: 70, alfa: 0.16, seguimiento: 0.55, rgb: "232, 243, 255" },
 ];
 
+const FUERA = -9999;
+
 export default function CursorGlow() {
   const raiz = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Sin ratón (móvil, tableta) o con movimiento reducido, no se monta nada.
-    const finoPuntero = window.matchMedia("(pointer: fine)");
-    const menosMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (!finoPuntero.matches || menosMovimiento.matches) return;
-
     const cont = raiz.current;
     if (!cont) return;
 
     const capas = Array.from(cont.children) as HTMLElement[];
-    const pos = CAPAS.map(() => ({ x: -9999, y: -9999 }));
-    const destino = { x: -9999, y: -9999 };
-    let visible = false;
-    let rafId = 0;
+    const pos = CAPAS.map(() => ({ x: FUERA, y: FUERA }));
+    const destino = { x: FUERA, y: FUERA };
+
+    let activo = false; // ¿el efecto está enganchado a los eventos?
+    let visible = false; // ¿hay un cursor conocido en pantalla?
+    let raf = 0;
+
+    /* Coloca todos los halos de golpe bajo el cursor. Se usa al entrar y al
+       volver a la pestaña, para que la estela no cruce la pantalla de lado a
+       lado como un latigazo. */
+    const situar = (x: number, y: number) => {
+      for (const p of pos) {
+        p.x = x;
+        p.y = y;
+      }
+    };
+
+    const pintar = () => {
+      for (let i = 0; i < capas.length; i++) {
+        const p = pos[i];
+        const s = CAPAS[i].seguimiento;
+        p.x += (destino.x - p.x) * s;
+        p.y += (destino.y - p.y) * s;
+        capas[i].style.transform = `translate3d(${p.x}px, ${p.y}px, 0) translate(-50%, -50%)`;
+      }
+    };
+
+    const bucle = () => {
+      pintar();
+      raf = requestAnimationFrame(bucle);
+    };
+    const arrancarBucle = () => {
+      if (!raf) raf = requestAnimationFrame(bucle);
+    };
+    const pararBucle = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+    };
+
+    const mostrar = () => {
+      visible = true;
+      cont.style.opacity = "1";
+      arrancarBucle();
+    };
+    const ocultar = () => {
+      visible = false;
+      cont.style.opacity = "0";
+      // El bucle sigue un momento para que el fundido no congele los halos.
+    };
 
     const onMove = (e: MouseEvent) => {
       destino.x = e.clientX;
       destino.y = e.clientY;
       if (!visible) {
-        // Primer movimiento: colocar todo bajo el cursor para que aparezca
-        // ahí mismo y no venga volando desde una esquina.
-        pos.forEach((p) => {
-          p.x = destino.x;
-          p.y = destino.y;
-        });
-        visible = true;
-        cont.style.opacity = "1";
+        situar(destino.x, destino.y);
+        mostrar();
       }
     };
-    const onLeave = () => {
-      visible = false;
-      cont.style.opacity = "0";
-    };
 
-    const tick = () => {
-      for (let i = 0; i < capas.length; i++) {
-        const p = pos[i];
-        const e = CAPAS[i].seguimiento;
-        p.x += (destino.x - p.x) * e;
-        p.y += (destino.y - p.y) * e;
-        capas[i].style.transform = `translate3d(${p.x}px, ${p.y}px, 0) translate(-50%, -50%)`;
+    /* El cursor sale de la ventana o el navegador pierde el foco. */
+    const onSalir = () => ocultar();
+
+    /* Pestaña oculta: se detiene el bucle. Al volver, la estela espera al
+       siguiente movimiento para recolocarse; si no, aparecería en el punto
+       donde estaba hace diez minutos. */
+    const onVisibilidad = () => {
+      if (document.hidden) {
+        ocultar();
+        pararBucle();
+      } else {
+        situar(FUERA, FUERA);
+        destino.x = FUERA;
+        destino.y = FUERA;
+        arrancarBucle();
       }
-      rafId = requestAnimationFrame(tick);
     };
-    rafId = requestAnimationFrame(tick);
 
-    window.addEventListener("mousemove", onMove, { passive: true });
-    document.addEventListener("mouseleave", onLeave);
-    window.addEventListener("blur", onLeave);
+    const enganchar = () => {
+      if (activo) return;
+      activo = true;
+      window.addEventListener("mousemove", onMove, { passive: true });
+      document.addEventListener("mouseleave", onSalir);
+      window.addEventListener("blur", onSalir);
+      document.addEventListener("visibilitychange", onVisibilidad);
+      arrancarBucle();
+    };
+
+    const soltar = () => {
+      if (!activo) return;
+      activo = false;
+      window.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseleave", onSalir);
+      window.removeEventListener("blur", onSalir);
+      document.removeEventListener("visibilitychange", onVisibilidad);
+      pararBucle();
+      ocultar();
+      situar(FUERA, FUERA);
+      pintar();
+    };
+
+    /* Dos condiciones deciden si el efecto existe, y las dos pueden cambiar
+       mientras la página está abierta: conectar un ratón a una tableta, o
+       activar «reducir movimiento» en el sistema. Por eso se escuchan. */
+    const hayRaton = window.matchMedia("(pointer: fine)");
+    const menosMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const revisar = () => {
+      if (hayRaton.matches && !menosMovimiento.matches) enganchar();
+      else soltar();
+    };
+
+    revisar();
+    hayRaton.addEventListener("change", revisar);
+    menosMovimiento.addEventListener("change", revisar);
 
     return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener("mousemove", onMove);
-      document.removeEventListener("mouseleave", onLeave);
-      window.removeEventListener("blur", onLeave);
+      hayRaton.removeEventListener("change", revisar);
+      menosMovimiento.removeEventListener("change", revisar);
+      soltar();
     };
   }, []);
 
@@ -89,8 +160,7 @@ export default function CursorGlow() {
     <div
       ref={raiz}
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-40 opacity-0 transition-opacity duration-500"
-      style={{ mixBlendMode: "screen" }}
+      className="cursor-glow pointer-events-none fixed inset-0 z-40 opacity-0 transition-opacity duration-500 print:hidden"
     >
       {CAPAS.map((c, i) => (
         <span
@@ -99,7 +169,7 @@ export default function CursorGlow() {
           style={{
             width: c.tam,
             height: c.tam,
-            transform: "translate3d(-9999px, -9999px, 0) translate(-50%, -50%)",
+            transform: `translate3d(${FUERA}px, ${FUERA}px, 0) translate(-50%, -50%)`,
             background: `radial-gradient(circle closest-side, rgba(${c.rgb}, ${c.alfa}), rgba(${c.rgb}, 0) 100%)`,
           }}
         />
